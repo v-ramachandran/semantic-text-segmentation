@@ -1,0 +1,15 @@
+#include<stdio.h>
+void main(char **argv, int argc)
+{
+FILE *p1,*p2;
+p1=fopen(argv[0],"r");
+p2=fopen(argv[1],"w");
+char c;
+while(c=p1.getchar()!=EOF)
+{
+	if(c!='=')
+		p2.putchar(c);
+}
+fclose(p1);
+fclose(p2);
+}
