@@ -18,7 +18,6 @@ module Document
       # Skip the first line when reading
       File.readlines(input_file_name).drop(1).each do |line|
         if line =~ delimiter_pattern
-          puts segment_size
           output_set << segment_size
           segment_size = 0
         else
