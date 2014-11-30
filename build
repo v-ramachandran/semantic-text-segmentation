@@ -8,6 +8,6 @@ mkdir bin
 RUBY_BIN_SCRIPTS=lib/ruby/bin/*;
 for i in $RUBY_BIN_SCRIPTS;
 do
- ln -s $(cd $(dirname $i); pwd)/$(basename $i) bin/$(basename -s .rb $i)
+ ln -s $(cd $(dirname $i); pwd)/$(basename $i) bin/$(basename $i .rb)
 done
 chmod +x bin/*
