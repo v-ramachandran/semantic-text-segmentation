@@ -3,16 +3,43 @@
 require 'optparse'
 require_relative './../lib/document/semantic_vector_set'
 
-@options = {:output_file => "topic_clusters"}
+@options = {:output_file => "topic_clusters", :similarity_method=> :cosine_similarity,
+            :similarity_threshold => 0.05}
 
 def parse_options_from_cmd_line
     OptionParser.new do |opts|
         opts.banner =
-        "Usage: generate_sentence_clusters.rb -f [-o] [-p]
+        "Usage: generate_sentence_clusters.rb -f [-o] [-m] [-t]
 
         Generate an output file containing the cluster labels of a given set of files
         that contain sentence vectors.
+
+        The following constraints exist:
+
+        * The available methods that can be specifed with -m are:
+          - cosine_similarity
+          - euclidean_similarity
+
+        * Similarity thresholds specified using -t must be greater than 0.0.
+
+        The following default values exist:
+
+        * -t threshold = 0.05
+        * -m method = cosine_similarity
+        * -o output = topic_clusters
         "
+
+        opts.on( '-m', '-method METHOD', "Specify the similarity method to be used
+          for comparing vectors") do |method|
+
+          @options[:similarity_method] = method.to_sym
+        end
+
+        opts.on( '-t', '-threshold THRESHOLD', "Specify the threshold which determines
+          how close two vectors must be in terms of similarity.") do |threshold|
+
+          @options[:similarity_threshold] = threshold.to_f
+        end
 
         opts.on( '-f', '--list FILE1,FILE2,FILEN', Array, "List of sentence vector files." ) do |file_list|
           @options[:file_list] = file_list
