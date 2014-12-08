@@ -1,0 +1,29 @@
+#!/bin/sh
+
+if [ -d bin ]; then
+ rm -rf bin
+fi
+mkdir bin
+
+function copy_scripts {
+ for i in "${@:2}";
+ do
+  ln -s $(cd $(dirname $i); pwd)/$(basename $i) bin/$(basename $i $1)
+ done
+}
+
+RUBY_BIN_SCRIPTS=lib/ruby/bin/*;
+copy_scripts .rb $RUBY_BIN_SCRIPTS;
+
+##########################
+# TODO: Clear this part up to un-hackily set up the local python installs
+python lib/python/setup.py install --home=$(pwd) 
+rm -rf dist
+rm -rf build
+rm -rf *.egg-info
+##########################
+
+PYTHON_BIN_SCRIPTS=lib/python/bin/*;
+copy_scripts .py $PYTHON_BIN_SCRIPTS;
+
+chmod +x bin/*
