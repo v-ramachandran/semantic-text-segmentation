@@ -17,6 +17,7 @@ copy_scripts .rb $RUBY_BIN_SCRIPTS;
 
 ##########################
 # TODO: Clear this part up to un-hackily set up the local python installs
+export PYTHONPATH=$PYTHONPATH:$(pwd)/lib/python
 python lib/python/setup.py install --home=$(pwd) 
 rm -rf dist
 rm -rf build
