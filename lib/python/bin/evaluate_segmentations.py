@@ -10,8 +10,8 @@ from argparse import ArgumentParser
 
 def setup_argument_parser():
     parser = ArgumentParser()
-    parser.add_argument("-d", "--directory",
-        help="Specify the source directory from which to retrieve files. DEFAULT: '.'",
+    parser.add_argument("-d", "--directories", nargs="+",
+        help="Specify the source directories from which to retrieve files. DEFAULT: '.'",
         default=".")
     parser.add_argument("-r", "--results",
         help="Specify the pattern of the CSV files containing segmentation results. DEFAULT: '*_output_size.csv'",
@@ -22,7 +22,7 @@ def setup_argument_parser():
 
     return parser.parse_args()
 
-def find_files(directory,pattern):
+def match(directory,pattern):
     output_files = []
     for file in os.listdir(directory):
         if fnmatch(file, pattern):
@@ -32,7 +32,9 @@ def find_files(directory,pattern):
 
 def retrieve_gold_set_vector(parsed_arguments):
     output_vector = []
-    gold_set_files = find_files(parsed_arguments.directory, parsed_arguments.gold_sets)
+    gold_set_files = []
+    for directory in parsed_arguments.directories:
+        gold_set_files.extend(match(directory, parsed_arguments.gold_sets))
     for file in gold_set_files:
         segment_sizes = read_csv(file).segment_size
         output_vector.extend(segment_sizes)
@@ -40,7 +42,9 @@ def retrieve_gold_set_vector(parsed_arguments):
 
 def retrieve_result_set_vector(parsed_arguments):
     output_vector = []
-    result_set_files = find_files(parsed_arguments.directory, parsed_arguments.results)
+    result_set_files = []
+    for directory in parsed_arguments.directories:
+        result_set_files.extend(match(directory, parsed_arguments.results))
     for file in result_set_files:
         segment_sizes = read_csv(file).segment_size
         output_vector.extend(segment_sizes)
