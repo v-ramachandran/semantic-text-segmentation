@@ -15,15 +15,9 @@ function copy_scripts {
 RUBY_BIN_SCRIPTS=lib/ruby/bin/*;
 copy_scripts .rb $RUBY_BIN_SCRIPTS;
 
-##########################
-# TODO: Clear this part up to un-hackily set up the local python installs
-export PYTHONPATH=$PYTHONPATH:$(pwd)/lib/python
-python lib/python/setup.py install --home=$(pwd) 
-rm -rf dist
-rm -rf build
-rm -rf *.egg-info
-##########################
-
+cd lib/python
+python setup.py develop --user
+cd ../..
 PYTHON_BIN_SCRIPTS=lib/python/bin/*;
 copy_scripts .py $PYTHON_BIN_SCRIPTS;
 
